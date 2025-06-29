@@ -1,0 +1,32 @@
+name: Deploy to Dev Env
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Executing remote SSH commands
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 16.171.153.101
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          port: 22
+          script: |
+            echo "Starting deployment"
+            whoami 
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            cd Backend-CI-CD 
+            git pull origin production
+            npm install
+            pm2 restart prod-be
