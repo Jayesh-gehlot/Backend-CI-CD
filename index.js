@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', async (req, res) => {
-    res.send('Checking CI CD');
+    res.send('Checking production CI CD');
 });
 
 app.post('/signup', async (req, res) => {
